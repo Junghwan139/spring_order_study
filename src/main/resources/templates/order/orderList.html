@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+
+<div class="container">
+
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+  <!--   검색기능 주석처리-->
+  <!--${T(com.example.domain.OrderStatus).values()-->
+  <!-- T문법 orstaters라는 클래스에서 values를 한 것 -->
+  <!--orderSearch라는 객체에 memberName, orderStatus라는 변수를 담아 서버로 다시 던져주는 것  -->
+  <div>
+    <div>
+      <form th:object="${orderSearch}" class="form-inline">
+        <div class="form-group mb-2">
+          <input type="text" th:field="*{memberName}" class="form-control" placeholder="회원명"/>
+        </div>
+        <div class="form-group mx-sm-1 mb-2">
+          <select th:field="*{orderStatus}" class="form-control">
+            <option value="">주문상태</option>
+            <option th:each="status : ${T(com.example.spring_order_study.order.OrderStatus).values()}"
+                    th:value="${status}"
+                    th:text="${status}">option
+            </option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">검색</button>
+      </form>
+    </div>
+
+    <table class="table table-striped" style="width: 130%;">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>회원명</th>
+        <th>상품명</th>
+        <th>주문가격</th>
+        <th>주문수량</th>
+        <th>상태</th>
+        <th>일시</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>   <!-- # -->
+        <td th:text="${order.member.name}"></td> <!-- 회원명 -->
+        <td th:text="${order.orderItems[0].item.name}"></td>  <!-- 상품명 -->
+        <td th:text="${order.orderItems[0].orderPrice}"></td> <!-- 주문가격 -->
+        <td th:text="${order.orderItems[0].count}"></td> <!-- 주문수량 -->
+        <td th:text="${order.status}"></td> <!-- 상태 -->
+        <td th:text="${order.orderDate}"></td> <!-- 일시 -->
+
+        <td>
+          <a th:if="${order.status.name() == 'ORDER'}" href="#" th:href="'javascript:cancel('+${order.id}+')'"
+             class="btn btn-danger">CANCEL</a>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div th:replace="fragments/footer :: footer"/>
+
+</div> <!-- /container -->
+
+</body>
+<script>
+    function cancel(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/orders/" + id + "/cancel");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</html>

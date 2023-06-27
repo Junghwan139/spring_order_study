@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+  <form role="form" action="/order" method="post">
+
+    <div class="form-group">
+      <label for="member">주문회원</label>
+      <select name="memberId" id="member" class="form-control">
+        <option value="">회원선택</option>
+        <option th:each="member : ${members}"
+                th:value="${member.id}"
+                th:text="${member.email}" />
+      </select>
+    </div>
+
+    <div id="orderItems">
+      <!-- This is a single item. We can clone and append it to orderItems using JS -->
+      <div class="item">
+        <div class="form-group">
+          <label for="item">상품명</label>
+          <select name="itemId" class="form-control item-select">
+            <option value="">상품선택</option>
+            <option th:each="item : ${items}"
+                    th:value="${item.id}"
+                    th:text="${item.name}" />
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="count">주문수량</label>
+          <input type="number" name="count" class="form-control item-count" placeholder="주문 수량을 입력하세요">
+        </div>
+      </div>
+    </div>
+
+    <button type="button" id="addItem" class="btn btn-secondary">Add Item</button>
+    <button type="button" id="removeItem" class="btn btn-secondary">Remove Item</button>
+    <br/>
+    <br/>
+    <button type="submit" class="btn btn-primary">주문하기</button>
+  </form>
+  <br/>
+  <div th:replace="fragments/footer :: footer" />
+
+</div> <!-- /container -->
+
+<!-- Include jQuery and a simple script to clone the item element -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $('#addItem').click(function(){
+    let clone = $('.item').first().clone();
+    clone.find('.item-select').val('');
+    clone.find('.item-count').val('');
+    $('#orderItems').append(clone);
+  });
+
+  $('#removeItem').click(function(){
+    if ($('.item').length > 1) {
+      $('.item').last().remove();
+    }
+  });
+});
+</script>
+
+</body>
+</html>
