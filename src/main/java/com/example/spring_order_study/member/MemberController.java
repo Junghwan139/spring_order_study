@@ -1,11 +1,15 @@
 package com.example.spring_order_study.member;
 
+import com.example.spring_order_study.item.Item;
 import com.example.spring_order_study.order.Customer_Order;
+import com.example.spring_order_study.orderdetail.Order_Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -44,19 +48,41 @@ public class MemberController {
         List<Member> members = memberService.member_findall() ;
         model.addAttribute("members",members);
 
-        // 주문수량 주문금액 합계
-        for(Member a : members){
-            System.out.println(a.getName()+"의 주문 갯수는 : "+a.getCustomerOrders().size());
-            int order_total = 0;
-            for(Customer_Order b : a.getCustomerOrders()){
-             //   System.out.println(b.getItem().getPrice().intValue() +"*"+b.getCount().intValue());
-                order_total += b.getItem().getPrice().intValue() * b.getCount().intValue();
+        return "members/memberList";
+
+    }
+
+
+
+    @GetMapping("members/{id}/detail")
+    public String memberdetail(@PathVariable("id")Long myid, Model model){
+
+        Member member = memberService.find_one(myid);
+        model.addAttribute("member",member);
+        model.addAttribute("orderCount",member.getCustomerOrders().size());
+
+        int total = 0;
+        int count = member.getCustomerOrders().size();
+        String items = "";
+        for(Customer_Order a : member.getCustomerOrders()){
+            for(Order_Item b : a.getOrderItems()){
+                total += b.getCount().intValue() * b.getOrderPrice().intValue();
+
+                if(count>1){
+                    items += a.getItem().getName()+", ";
+                }else{
+                    items += a.getItem().getName();
+                }
+
+                count--;
+
             }
-            System.out.println("주문 금액은 : "+order_total);
         }
 
+        model.addAttribute("orderItems",items);
+        model.addAttribute("orderAmount",total);
 
-        return "members/memberList";
+        return"members/memberDetail";
 
     }
 

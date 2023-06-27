@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <h2>회원 세부 정보</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>항목</th>
+            <th>값</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>이름</td>
+            <td th:text="${member.name}"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td th:text="${member.email}"></td>
+        </tr>
+        <tr>
+            <td>도시</td>
+            <td th:text="${member.address?.city}"></td>
+        </tr>
+        <tr>
+            <td>주소</td>
+            <td th:text="${member.address?.street}"></td>
+        </tr>
+        <tr>
+            <td>우편번호</td>
+            <td th:text="${member.address?.zipcode}"></td>
+        </tr>
+        <tr>
+            <td>주문 건수</td>
+            <td th:text="${orderCount}"></td>
+        </tr>
+        <tr>
+            <td>주문 아이템</td>
+            <td th:each="item : ${orderItems}" th:text="${item}"></td>
+        </tr>
+        <tr>
+            <td>주문 금액</td>
+            <td th:text="${orderAmount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+
+</body>
+</html>
