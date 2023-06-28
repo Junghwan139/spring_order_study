@@ -2,14 +2,12 @@ package com.example.spring_order_study.order;
 
 import com.example.spring_order_study.item.ItemService;
 import com.example.spring_order_study.member.MemberService;
-import com.example.spring_order_study.orderdetail.Order_ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.List;
 
 
@@ -18,10 +16,7 @@ public class Customer_OrderController {
 
     @Autowired MemberService memberService;  // 서비스에서 추가 기능이 없는 경우 레파지토리를 오토와이어드 해도 됨
     @Autowired ItemService itemService;
-    @Autowired
-    Customer_OrderService orderService;
-    @Autowired
-    Order_ItemService orderItemService;
+    @Autowired Customer_OrderService orderService;
 
     @GetMapping("order")
     public String order_new(Model model1, Model model2){

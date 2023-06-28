@@ -4,7 +4,6 @@ import com.example.spring_order_study.order.Customer_Order;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,7 +36,6 @@ public class Member {
 
     @Column
     private LocalDateTime createDate;
-
 
     @Builder
     public Member(String name, String email, String password, Address address){

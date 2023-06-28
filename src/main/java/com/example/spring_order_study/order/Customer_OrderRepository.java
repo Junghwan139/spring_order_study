@@ -3,7 +3,6 @@ package com.example.spring_order_study.order;
 import com.example.spring_order_study.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -14,5 +13,7 @@ public interface Customer_OrderRepository extends JpaRepository<Customer_Order, 
     List<Customer_Order> findByMember(Member member);
 
     List<Customer_Order> findByMemberAndStatus(Member member, OrderStatus orderStatus);
+
+    List<Customer_Order> findByMember_Id(Long id);
 
 }

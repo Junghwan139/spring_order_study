@@ -1,7 +1,7 @@
 package com.example.spring_order_study.member;
 
-import com.example.spring_order_study.item.Item;
 import com.example.spring_order_study.order.Customer_Order;
+import com.example.spring_order_study.order.Customer_OrderRepository;
 import com.example.spring_order_study.orderdetail.Order_Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -18,6 +16,7 @@ import java.util.List;
 public class MemberController {
 
     @Autowired MemberService memberService;
+    @Autowired Customer_OrderRepository customerOrderRepository;
 
     @GetMapping("/")
     public String home(){
@@ -81,6 +80,9 @@ public class MemberController {
 
         model.addAttribute("orderItems",items);
         model.addAttribute("orderAmount",total);
+        model.addAttribute("orders",customerOrderRepository.findByMember_Id(myid));
+
+
 
         return"members/memberDetail";
 
