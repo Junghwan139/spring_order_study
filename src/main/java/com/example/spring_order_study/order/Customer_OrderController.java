@@ -32,6 +32,7 @@ public class Customer_OrderController {
         // Customer_Order저장 → Order_Item 저장
         orderService.order_save(order);
         return "redirect:/orders";
+
     }
 
     // 주문 List 화면 호출

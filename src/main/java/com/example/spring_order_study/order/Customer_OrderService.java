@@ -4,6 +4,8 @@ import com.example.spring_order_study.item.ItemService;
 import com.example.spring_order_study.member.MemberService;
 import com.example.spring_order_study.orderdetail.Order_Item;
 import com.example.spring_order_study.orderdetail.Order_ItemRepository;
+import com.example.spring_order_study.orderhistory.Order_History;
+import com.example.spring_order_study.orderhistory.Order_HistroyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
@@ -16,12 +18,11 @@ import java.util.List;
 //에러 발생시 rollback  Checked Exception에도 예외 발생을 위해서는 rollbackOn = {Exception.class} 추가 확인 필요
 public class Customer_OrderService {
 
-    @Autowired
-    Customer_OrderRepository orderRepository;
+    @Autowired Customer_OrderRepository orderRepository;
     @Autowired MemberService memberService;
     @Autowired ItemService itemService;
-    @Autowired
-    Order_ItemRepository orderItemRepository;
+    @Autowired Order_ItemRepository orderItemRepository;
+    @Autowired Order_HistroyRepository orderHistroyRepository;
 
     //Create
     public void order_save(Customer_OrderDto order) throws Exception {
@@ -46,6 +47,20 @@ public class Customer_OrderService {
                     .item(order1.getItem())
                     .build();
             orderItemRepository.save(orderItem);
+
+            // order_history 저장
+            Order_History orderHistory = Order_History.builder()
+                    .count(order1.getCount())
+                    .status(order1.getStatus())
+                    .orderDate(order1.getOrderDate())
+                    .item(orderItem.getItem())
+                    .member(order1.getMember())
+                    .build();
+            orderHistroyRepository.save(orderHistory);
+
+
+
+
         }
 
     }
@@ -68,6 +83,16 @@ public class Customer_OrderService {
         // 아이템 재고량 + 시킴
         customerOrder.getItem().AddQuantity(customerOrder.getCount());
         orderRepository.save(customerOrder);
+
+        // order_history 저장
+        Order_History orderHistory = Order_History.builder()
+                .count(-customerOrder.getCount())
+                .status(customerOrder.getStatus())
+                .orderDate(customerOrder.getOrderDate())
+                .item(customerOrder.getItem())
+                .member(customerOrder.getMember())
+                .build();
+        orderHistroyRepository.save(orderHistory);
 
     }
 
