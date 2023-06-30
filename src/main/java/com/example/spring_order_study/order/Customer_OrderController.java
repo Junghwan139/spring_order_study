@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
+
 @Controller
 public class Customer_OrderController {
 
@@ -25,6 +26,7 @@ public class Customer_OrderController {
         return "order/orderForm";
     }
 
+
     @PostMapping("order")
     public String order_regist(Customer_OrderDto order) throws Exception {
 
@@ -34,6 +36,7 @@ public class Customer_OrderController {
 
     }
 
+
     // 주문 List 화면 호출
     @GetMapping("orders")  // @ModelAttribute("맵핑 이름")할 경우 이름을 다르게 해도 됨 명시적으로 OrderSearchDto와 맵핑을 할 수 있다.
     public String orderList(Model model, OrderSearch orderSearch){
@@ -41,6 +44,7 @@ public class Customer_OrderController {
         model.addAttribute("orders",orderList);
         return "order/orderList";
     }
+
 
     // 더 나은 코드? 불필요한 DB조회 횟수 최소화 -> 트래픽 많을 땐
     // 주문 cancel
